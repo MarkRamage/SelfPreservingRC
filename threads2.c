@@ -48,7 +48,6 @@ pthread_cond_t reverseFlag = PTHREAD_COND_INITIALIZER;
 char arr[] = "10000";
 
 static void *control(void *p) {
-	for (;;) {
 
 	     int sockfd, newsockfd, portno;
 	     socklen_t clilen;
@@ -78,6 +77,8 @@ static void *control(void *p) {
 	     if (newsockfd < 0)
 	          error("ERROR on accept");
 	     bzero(buffer,256);
+
+	     while(1){
 	     n = read(newsockfd,buffer,2);
 	     if (n < 0) error("ERROR reading from socket");
 	     pthread_mutex_lock(&motorCtrl);
@@ -168,20 +169,14 @@ static void *sensor(void *p) {
 				proximity = (data[0] * 256 + data[1]);
 
 				// Output data to screen
-				printf("Ambient Light Luminance : %d lux \n", luminance);
+				//printf("Ambient Light Luminance : %d lux \n", luminance);
 				printf("Proximity Of The Device : %d \n", proximity);
 			}
 		}
 		//get info from client
-		pthread_mutex_lock(&motorCtrl);
-		/*if (proximity < ) {
-			up = false;
-			down = true;
-			right = false;
-			left = false;
+		if (proximity > 2300 ) {
 			err = true;
-		}*/
-		pthread_mutex_unlock(&motorCtrl);
+		}
 	}
 }
 
@@ -196,6 +191,22 @@ static void *motor(void *p) {
 	for (;;) {
 
 		pthread_mutex_lock(&motorCtrl);
+		if (err) {
+			if((LEDhandle = fopen(LED3brightness,"r+"))!=NULL) {
+				fwrite("1", sizeof(char), 1, LEDhandle);
+			}
+			if((LEDhandle = fopen(LED2brightness,"r+"))!=NULL) {
+				fwrite("1", sizeof(char), 1, LEDhandle);
+			}
+			if((LEDhandle = fopen(LED1brightness,"r+"))!=NULL) {
+				fwrite("1", sizeof(char), 1, LEDhandle);
+			}
+			if((LEDhandle = fopen(LED0brightness,"r+"))!=NULL) {
+				fwrite("1", sizeof(char), 1, LEDhandle);
+			}
+			err = false;
+			sleep(2);
+		} else {
 		if((LEDhandle = fopen(LED3brightness,"r+"))!=NULL) {
 			if (up) {
 				fwrite("1", sizeof(char), 1, LEDhandle);
@@ -229,10 +240,8 @@ static void *motor(void *p) {
 			fclose(LEDhandle);
 		}
 
-
-		if (err == true) {
-			usleep(300000);
 		}
+
 		pthread_mutex_unlock(&motorCtrl);
 
 	}
