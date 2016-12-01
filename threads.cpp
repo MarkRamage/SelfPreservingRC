@@ -36,6 +36,8 @@ pthread_mutex_t motorCtrl = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t reverseLock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t reverseFlag = PTHREAD_COND_INITIALIZER;
 
+char arr[] = "10000";
+
 static void *control(void *p) {
 	for (;;) {
 
@@ -53,7 +55,7 @@ static void *control(void *p) {
 	     if (sockfd < 0)
 	        error("ERROR opening socket");
 	     bzero((char *) &serv_addr, sizeof(serv_addr));
-	     portno = atoi(argv[1]);
+	     portno = atoi(arr);
 	     serv_addr.sin_family = AF_INET;
 	     serv_addr.sin_addr.s_addr = INADDR_ANY;
 	     serv_addr.sin_port = htons(portno);
