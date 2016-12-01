@@ -1,5 +1,4 @@
-
-#include "cape.h"
+//#include "cape.h"
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -46,7 +45,6 @@ static void *control(void *p) {
 	     char buffer[256];
 	     struct sockaddr_in serv_addr, cli_addr;
 	     int n;
-		
 	     /*if (argc < 2) {
 	         fprintf(stderr,"ERROR, no port provided\n");
 	         exit(1);
@@ -225,7 +223,7 @@ static void *motor(void *p) {
 		}
 
 
-		if (ERR == true) {
+		if (err == true) {
 			usleep(300000);
 		}
 		pthread_mutex_unlock(&motorCtrl);
@@ -234,7 +232,7 @@ static void *motor(void *p) {
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 	/*
 	myCape *capeptr = new myCape();
 	capeptr->DCMotorInit(MotorName, Frequency);
@@ -253,7 +251,7 @@ int main(int argc, char* argv[]) {
 	pthread_attr_setschedpolicy(&myattr,SCHED_RR);
 	// pthread_attr_setschedparam(&myattr,);
 
-	err = pthread_create(&control_id, &myattr, control, NULL);
+	err = pthread_create(&control_id, &myattr, control, argv);
 	err = pthread_create(&IR_id, &myattr, sensor, NULL);
 	err = pthread_create(&motor_id, &myattr, motor, NULL);
 
@@ -265,6 +263,9 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+
+
+
 
 
 
