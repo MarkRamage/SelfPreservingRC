@@ -117,14 +117,14 @@ static void *control(void *p) {
 
 static void *sensor(void *p) {
 	int file, luminance, proximity;
-	char *bus = "/dev/i2c-1";
+	//char *bus = "/dev/i2c-1";
 	for (;;) {
-		if ((file = open(bus, O_RDWR)) < 0){
+		/*if ((file = open(bus, O_RDWR)) < 0){
 			printf("Failed to open the bus. \n");
 			exit(1);
-		}
+		}*/
 		// Get I2C device, VCNL4010 I2C address is 0x13(19)
-		ioctl(file, I2C_SLAVE, 0x13);
+		//ioctl(file, I2C_SLAVE, 0x13);
 
 		// Select command register(0x80)
 		// Enables ALS and proximity measurement, LP oscillator(0xFF)
@@ -169,13 +169,13 @@ static void *sensor(void *p) {
 		}
 		//get info from client
 		pthread_mutex_lock(&motorCtrl);
-		if (proximity < ) {
+		/*if (proximity < ) {
 			up = false;
 			down = true;
 			right = false;
 			left = false;
 			err = true;
-		}
+		}*/
 		pthread_mutex_unlock(&motorCtrl);
 	}
 }
