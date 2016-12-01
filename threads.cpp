@@ -252,7 +252,7 @@ int main(int argc, char* argv[]) {
 	// pthread_attr_setschedparam(&myattr,);
 
 	err = pthread_create(&control_id, &myattr, control, NULL);
-	err = pthread_create(&IR_id, &myattr, IRsensor, NULL);
+	err = pthread_create(&IR_id, &myattr, sensor, NULL);
 	err = pthread_create(&motor_id, &myattr, motor, NULL);
 
 	pthread_attr_destroy(&myattr);
